@@ -8,6 +8,12 @@ let playerCurrentLife = MaxLife;
 let monsterCurrentLife = MaxLife;
 let hasBounesLife = true;
 
+const initiallife = prompt("what is the life value", "100");
+MaxLife = parseInt(initiallife);
+if (isNaN(MaxLife) || MaxLife <= 0) {
+  MaxLife = 100;
+}
+
 adjustHealthBars(MaxLife);
 attackBtn.addEventListener("click", attackHandler);
 strongAttackBtn.addEventListener("click", strongAttackHandler);
