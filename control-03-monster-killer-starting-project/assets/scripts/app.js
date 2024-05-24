@@ -6,6 +6,7 @@ const HEAL_VALUE = 6;
 let MaxLife = 100;
 let playerCurrentLife = MaxLife;
 let monsterCurrentLife = MaxLife;
+let hasBounesLife = true;
 
 adjustHealthBars(MaxLife);
 attackBtn.addEventListener("click", attackHandler);
@@ -37,8 +38,16 @@ function hitMonster(attackValue) {
 }
 
 function endRound() {
+  let healthBeforeDeath = playerCurrentLife;
   const fireBack = dealPlayerDamage(MAX_MONSTER_ATTACK);
   playerCurrentLife -= fireBack;
+  if (playerCurrentLife <= 0 && hasBounesLife) {
+    playerCurrentLife = healthBeforeDeath;
+    hasBounesLife = false;
+    alert("You are lucky you have a bounes life");
+    removeBonusLife();
+    setPlayerHealth(healthBeforeDeath);
+  }
   if (playerCurrentLife <= 0 && monsterCurrentLife > 0) {
     alert("LOSER HAHAHAHA");
   } else if (monsterCurrentLife <= 0 && playerCurrentLife > 0) {
@@ -46,4 +55,13 @@ function endRound() {
   } else if (monsterCurrentLife <= 0 && playerCurrentLife <= 0) {
     alert("Draw");
   }
+  if (playerCurrentLife <= 0 || monsterCurrentLife <= 0) {
+    reset();
+  }
+}
+
+function reset() {
+  resetGame(MaxLife);
+  playerCurrentLife = MaxLife;
+  monsterCurrentLife = MaxLife;
 }
