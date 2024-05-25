@@ -143,11 +143,15 @@ function addToLog(event, value, playerHealth, monsterHealth) {
     playerHealth: playerHealth,
     monsterHealth: monsterHealth,
   };
-  if (event === LOG_EVENT_ATTACK || event === LOG_EVENT_STRONG) {
-    logEntry.target = "MONSTER";
-  }
-  if (event === LOG_EVENT_MONSTER) {
-    logEntry.target = "PLAYER";
+
+  switch (event) {
+    case LOG_EVENT_ATTACK:
+    case LOG_EVENT_STRONG:
+      logEntry.target = "MONSTER";
+      break;
+    case LOG_EVENT_MONSTER:
+      logEntry.target = "PLAYER";
+      break;
   }
   logArray.push(logEntry);
 }
