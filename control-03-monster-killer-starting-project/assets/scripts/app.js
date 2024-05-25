@@ -57,7 +57,7 @@ function logHandler() {
 function hitMonster(attackValue) {
   const monsterHit = dealMonsterDamage(attackValue);
   monsterCurrentLife -= monsterHit;
-  if ((attackValue = MAX_NORMAL_PLAYER_ATTACK)) {
+  if (attackValue === MAX_NORMAL_PLAYER_ATTACK) {
     addToLog(
       LOG_EVENT_ATTACK,
       monsterHit,
