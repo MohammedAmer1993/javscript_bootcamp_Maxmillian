@@ -8,6 +8,7 @@ const LOG_EVENT_HEAL = "PLAYER HEAL";
 const LOG_EVENT_MONSTER = "MONSTER ATTACK";
 const LOG_EVENT_ENDGAME = "FINAL RESUTL";
 
+let lastLoggedEntry = -1;
 let MaxLife;
 let playerCurrentLife;
 let monsterCurrentLife;
@@ -51,11 +52,18 @@ function healHandler() {
 }
 
 function logHandler() {
+  let i = 0;
   for (const el of logArray) {
-    for (const key in el) {
-      console.log(key, " = ", el[key]);
+    if (lastLoggedEntry === -1 || lastLoggedEntry < i) {
+      console.log(`${i}`);
+      for (const key in el) {
+        console.log(key, " = ", el[key]);
+      }
+      console.log("=============================================");
+      lastLoggedEntry = i;
+      break;
     }
-    console.log("=============================================");
+    i++;
   }
 }
 
