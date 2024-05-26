@@ -15,9 +15,20 @@ let monsterCurrentLife;
 let hasBounesLife = true;
 let logArray = [];
 
-const initiallife = prompt("what is the life value", "100");
-MaxLife = parseInt(initiallife);
-if (isNaN(MaxLife) || MaxLife <= 0) {
+function getInput() {
+  const initiallife = prompt("what is the life value", "100");
+  let parsedValue = parseInt(initiallife);
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw { message: "input can't be parsed" };
+  }
+  return parsedValue;
+}
+
+try {
+  MaxLife = getInput();
+} catch (error) {
+  console.log(error.message);
+  alert("value used is invalid, used the default value");
   MaxLife = 100;
 }
 
