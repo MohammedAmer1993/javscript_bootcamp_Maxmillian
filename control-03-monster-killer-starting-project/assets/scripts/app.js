@@ -51,7 +51,12 @@ function healHandler() {
 }
 
 function logHandler() {
-  console.log(logArray);
+  for (const el of logArray) {
+    for (const key in el) {
+      console.log(key, " = ", el[key]);
+    }
+    console.log("=============================================");
+  }
 }
 
 function hitMonster(attackValue) {
