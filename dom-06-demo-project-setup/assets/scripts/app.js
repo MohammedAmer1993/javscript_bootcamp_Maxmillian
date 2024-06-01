@@ -6,6 +6,7 @@ const addBtn = document.querySelector("#add-modal .btn.btn--success");
 const inputFields = document.querySelectorAll("input");
 const movList = document.getElementById("movie-list");
 const midSection = document.getElementById("entry-text");
+const divConfirmDel = document.getElementById("delete-modal");
 const movEntries = [];
 
 function updateUI() {
@@ -14,6 +15,31 @@ function updateUI() {
   } else {
     midSection.style.display = "none";
   }
+}
+
+function deleteNodeProcHandler(id) {
+  const length = movEntries.length;
+  for (let i = 0; i < length; ++i) {
+    if (id === movEntries[i].id) {
+      movEntries.splice(i, 1);
+      movList.children[i].remove();
+      closeBackDrop();
+      updateUI();
+      break;
+    }
+  }
+}
+
+function nodeDeletionHandler(id) {
+  const confirmDeleteBtn = document.querySelector("#delete-modal .btn--danger");
+  const cancelDeleteBtn = document.querySelector("#delete-modal .btn--passive");
+
+  openDeleteWarning();
+  confirmDeleteBtn.addEventListener(
+    "click",
+    deleteNodeProcHandler.bind(null, id)
+  );
+  cancelDeleteBtn.addEventListener("click", closeBackDrop);
 }
 
 function createElemnt(title, url, rating, id) {
@@ -28,27 +54,36 @@ function createElemnt(title, url, rating, id) {
       <p>${rating}/5</p>
     </div>
   `;
-  tempElement.addEventListener("click", deleteNodeHandler.bind(null, id));
+  tempElement.addEventListener("click", nodeDeletionHandler.bind(null, id));
   return tempElement;
-}
-function deleteNodeHandler(id) {
-  const length = movEntries.length;
-  for (let i = 0; i < length; ++i) {
-    if (id === movEntries[i].id) {
-      movEntries.splice(i, 1);
-      movList.children[i].remove();
-      break;
-    }
-  }
 }
 
 function toggleBackDrop() {
   divBackDrop.classList.toggle("visible");
 }
-function toggleAddMovie() {
-  divAddModal.classList.toggle("visible");
-  toggleBackDrop();
+
+function openBackDrop() {
+  divBackDrop.classList.add("visible");
+}
+function closeBackDrop() {
+  divBackDrop.classList.remove("visible");
+  divConfirmDel.classList.remove("visible");
+}
+
+function openAddMovie() {
+  divAddModal.classList.add("visible");
+  openBackDrop();
+}
+
+function closeAddMovie() {
+  divAddModal.classList.remove("visible");
+  closeBackDrop();
   clearInputs();
+}
+
+function openDeleteWarning() {
+  divConfirmDel.classList.add("visible");
+  openBackDrop();
 }
 
 function checkValidEntry() {
@@ -86,7 +121,7 @@ function addEntry() {
   movEntries.push(entryObj);
   updateUI();
   movList.appendChild(newElemnt);
-  toggleAddMovie();
+  closeAddMovie();
 }
 
 function clearInputs() {
@@ -102,7 +137,7 @@ function addEntryHandler() {
   addEntry();
 }
 
-addMovieBtn.addEventListener("click", toggleAddMovie);
-cancelBtn.addEventListener("click", toggleAddMovie);
-divBackDrop.addEventListener("click", toggleAddMovie);
+addMovieBtn.addEventListener("click", openAddMovie);
+cancelBtn.addEventListener("click", closeAddMovie);
+divBackDrop.addEventListener("click", closeAddMovie);
 addBtn.addEventListener("click", addEntryHandler);
