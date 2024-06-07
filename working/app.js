@@ -74,11 +74,74 @@ function clickHandler(itemArr, optArr) {
 
 // console.log(arr[2].includes(5));
 
-let arr = [3, 5, 6, 7];
-let newarr = [];
+// let arr = [3, 5, 6, 7];
+// let newarr = [];
 
-arr.forEach((ele, idx, numbers) => {
-  newarr.push({ idx: idx, value: ele });
-});
+// arr.forEach((ele, idx, numbers) => {
+//   newarr.push({ idx: idx, value: ele });
+// });
 
-console.log(newarr);
+// console.log(newarr);
+
+// function father(fn) {
+//   return function (...args) {
+//     return fn(...args);
+//   };
+// }
+
+// function son(a, b) {
+//   return a + b;
+// }
+
+// let sum = father(son)(3, 5);
+// console.log(sum);
+
+// let s = "mohammed;299;ok;88";
+
+// let y = s.split(";").map((el, idx, list) => {
+//   if (isNaN(el)) {
+//     return el;
+//   } else {
+//     return +el;
+//   }
+// });
+
+// console.log(y);
+
+// let myArr = ["mhmd", "amer", "mody", "rady"];
+// const [fna, lna, so] = myArr;
+// console.log(so);
+
+// const mySet = new Set([1, 2, 3, 4, 5]);
+
+// mySet.add("hi");
+// console.log(mySet.values());
+// mySet.delete("hi");
+// console.log(mySet.values());
+
+// for (const entry of mySet.entries()) {
+//   console.log(entry);
+// }
+
+// const person1 = { name: "mohammed", age: 31 };
+// const person2 = { name: "yousef", age: 30 };
+// const person3 = { name: "mody", age: 30 };
+
+// const myMap = new Map([
+//   [person1, ["football", "swimming"]],
+//   [person2, ["computer games", "social media"]],
+// ]);
+
+// myMap.set(person3, ["dominos", "chess"]);
+// console.log(myMap);
+
+// for (const [key, value] of myMap.entries()) {
+//   console.log(key);
+//   console.log(value);
+// }
+
+// for (const key of myMap.keys()) console.log(key);
+
+// for (const value of myMap.values()) console.log(value);
+// myMap.clear();
+// console.log(myMap.get(person1));
