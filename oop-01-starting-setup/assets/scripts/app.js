@@ -12,8 +12,8 @@ class ProductItem {
     this.product = product;
   }
 
-  addToCart() {
-    console.log("adding to cart from inside the productitem class");
+  addItem() {
+    App.addToCart(this.product);
   }
   render() {
     const listItem = document.createElement("li");
@@ -30,7 +30,7 @@ class ProductItem {
       </div>
       `;
     const addBtn = listItem.querySelector("button");
-    addBtn.addEventListener("click", this.addToCart.bind(this));
+    addBtn.addEventListener("click", this.addItem.bind(this));
     return listItem;
   }
 }
@@ -51,7 +51,6 @@ class ProductList {
   ];
 
   render() {
-    const renderHook = document.getElementById("app");
     const prodList = document.createElement("ul");
     prodList.classList.add("product-list");
     for (const el of this.products) {
@@ -59,9 +58,52 @@ class ProductList {
       const listItem = product.render();
       prodList.append(listItem);
     }
+    return prodList;
+  }
+}
+
+class ShoppingCart {
+  items = [];
+
+  addProductToCart(product) {
+    this.items.push(product);
+  }
+
+  render() {
+    const cartElemnt = document.createElement("section");
+    cartElemnt.innerHTML = `
+    <h2>Total: \$${0}</h2>
+    <button>Order Now!</button>
+    `;
+    cartElemnt.classList.add("cart");
+    return cartElemnt;
+  }
+}
+
+class Shop {
+  render() {
+    const renderHook = document.getElementById("app");
+    const productList = new ProductList();
+    const prodList = productList.render();
+    this.shoppingCart = new ShoppingCart();
+    const cart = this.shoppingCart.render();
+    renderHook.append(cart);
     renderHook.append(prodList);
   }
 }
 
-const productList = new ProductList();
-productList.render();
+class App {
+  static cart;
+
+  static init() {
+    const shop = new Shop();
+    shop.render();
+    this.cart = shop.shoppingCart;
+  }
+
+  static addToCart(product) {
+    this.cart.addProductToCart(product);
+  }
+}
+
+App.init();
