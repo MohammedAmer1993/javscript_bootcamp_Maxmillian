@@ -67,6 +67,11 @@ class ShoppingCart {
 
   addProductToCart(product) {
     this.items.push(product);
+    const totalPriceOfProduct = this.items.reduce(
+      (prev, curr) => prev + curr.price,
+      0
+    );
+    this.total.innerHTML = `\$${totalPriceOfProduct.toFixed(2)}`;
   }
 
   render() {
@@ -75,6 +80,7 @@ class ShoppingCart {
     <h2>Total: \$${0}</h2>
     <button>Order Now!</button>
     `;
+    this.total = cartElemnt.querySelector("h2");
     cartElemnt.classList.add("cart");
     return cartElemnt;
   }
