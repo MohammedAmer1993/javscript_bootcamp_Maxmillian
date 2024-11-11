@@ -1,9 +1,9 @@
 class Product {
-  constructor(tit, img, des, pri) {
-    this.title = tit;
-    this.img_url = img;
-    this.description = des;
-    this.price = pri;
+  constructor(title, imageURL, desc, price) {
+    this.title = title;
+    this.imageURL = imageURL;
+    this.desc = desc;
+    this.price = price;
   }
 }
 
@@ -12,103 +12,104 @@ class ProductItem {
     this.product = product;
   }
 
-  addItem() {
-    App.addToCart(this.product);
+  addtoCart() {
+    console.log("adding to cart");
+    App.addToCartApp(this.product);
   }
+
   render() {
-    const listItem = document.createElement("li");
-    listItem.classList.add("product-item");
-    listItem.innerHTML = `
+    const elmentItem = document.createElement("li");
+    elmentItem.classList.add("product-item");
+    elmentItem.innerHTML = `
       <div>
-        <img src=${this.product.img_url} alt=${this.product.description}>
+        <img src="${this.product.imageURL}" alt="${this.product.desc}">
         <div class="product-item__content">
-          <h2>${this.product.title}<h2>
-          <h3>${this.product.price}</h3>
-          <p>${this.product.description}</p>
-          <button>Add to Cart </button>
+          <h2>${this.product.title}</h2>
+          <h3>\$${this.product.price}</h3>
+          <button>add to cart</button>
         </div>
       </div>
       `;
-    const addBtn = listItem.querySelector("button");
-    addBtn.addEventListener("click", this.addItem.bind(this));
-    return listItem;
+    const cartAddBtn = elmentItem.querySelector("button");
+    cartAddBtn.addEventListener("click", this.addtoCart.bind(this));
+    return elmentItem;
   }
 }
+
+class Cart {
+  items = [];
+
+  updateCartItems(item) {
+    this.items.push(item);
+    let total = 0;
+    for (const obj of this.items) {
+      total = total + obj.price;
+    }
+    this.totalPrice.innerHTML = `<h2>Total amount: \$${total}</h2>`;
+  }
+
+  render() {
+    const cartElement = document.createElement("section");
+    cartElement.classList.add("cart");
+    cartElement.innerHTML = `
+    <h2>Total amount: \$${0}</h2>
+    <button>Order Now</button>
+    `;
+    this.totalPrice = cartElement.querySelector("h2");
+    return cartElement;
+  }
+}
+
 class ProductList {
   products = [
     new Product(
-      "billow",
-      "https://cdn.arhaus.com/product/StandardV2/CORE1323_I220127.jpg?preset=Product1920x1440",
       "soft billow",
+      "https://linensociety.com/cdn/shop/products/heirloom-pillow_14294b09-8232-4d5d-a305-022b802669ab_1400x.jpg?v=1584402804",
+      "soft billow for good sleeping",
       19.99
     ),
     new Product(
-      "carpet",
-      "https://www.artcarpet.com/assets/images/about-us.jpg",
-      "very high quality carpet",
-      89.99
+      "iranian carpet",
+      "https://kalouttour.com/wp-content/uploads/2020/09/persian-carpet-6-705x528.jpg",
+      "very good high quality persian carpet made by hand",
+      129.99
     ),
   ];
 
-  render() {
-    const prodList = document.createElement("ul");
-    prodList.classList.add("product-list");
-    for (const el of this.products) {
-      const product = new ProductItem(el);
-      const listItem = product.render();
-      prodList.append(listItem);
+  renderProducts() {
+    const productItemsList = document.createElement("ul");
+    productItemsList.classList.add("product-list");
+    for (const item of this.products) {
+      const product = new ProductItem(item);
+      const elmentItem = product.render();
+      productItemsList.append(elmentItem);
     }
-    return prodList;
-  }
-}
-
-class ShoppingCart {
-  items = [];
-
-  addProductToCart(product) {
-    this.items.push(product);
-    const totalPriceOfProduct = this.items.reduce(
-      (prev, curr) => prev + curr.price,
-      0
-    );
-    this.total.innerHTML = `\$${totalPriceOfProduct.toFixed(2)}`;
-  }
-
-  render() {
-    const cartElemnt = document.createElement("section");
-    cartElemnt.innerHTML = `
-    <h2>Total: \$${0}</h2>
-    <button>Order Now!</button>
-    `;
-    this.total = cartElemnt.querySelector("h2");
-    cartElemnt.classList.add("cart");
-    return cartElemnt;
+    return productItemsList;
   }
 }
 
 class Shop {
+  cart = new Cart();
+  productList = new ProductList();
+
   render() {
     const renderHook = document.getElementById("app");
-    const productList = new ProductList();
-    const prodList = productList.render();
-    this.shoppingCart = new ShoppingCart();
-    const cart = this.shoppingCart.render();
-    renderHook.append(cart);
-    renderHook.append(prodList);
+    const cartElemnt = this.cart.render();
+    const produtListElemnt = this.productList.renderProducts();
+    renderHook.append(cartElemnt);
+    renderHook.append(produtListElemnt);
   }
 }
 
 class App {
-  static cart;
-
   static init() {
-    const shop = new Shop();
-    shop.render();
-    this.cart = shop.shoppingCart;
+    this.shop = new Shop();
+    this.cart = this.shop.cart;
+    this.shop.render();
   }
 
-  static addToCart(product) {
-    this.cart.addProductToCart(product);
+  static addToCartApp(product) {
+    this.cart.updateCartItems(product);
   }
 }
 
