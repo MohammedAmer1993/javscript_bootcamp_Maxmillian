@@ -39,13 +39,17 @@ class ProductItem {
 class Cart {
   items = [];
 
+  get total() {
+    return this.items.reduce((prev, curr) => prev + curr.price, 0);
+  }
+
   updateCartItems(item) {
     this.items.push(item);
     let total = 0;
     for (const obj of this.items) {
       total = total + obj.price;
     }
-    this.totalPrice.innerHTML = `<h2>Total amount: \$${total}</h2>`;
+    this.totalPrice.innerHTML = `<h2>Total amount: \$${total.toFixed(2)}</h2>`;
   }
 
   render() {
