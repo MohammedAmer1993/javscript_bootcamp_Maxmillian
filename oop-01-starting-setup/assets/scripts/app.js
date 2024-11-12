@@ -15,9 +15,14 @@ class attribute {
 }
 
 class Component {
-  constructor(hookID) {
+  constructor(hookID, shoulRender = true) {
     this.hookId = hookID;
+    if (shoulRender) {
+      this.render();
+    }
   }
+
+  render() {}
 
   renderElement(tag, className, attributes) {
     const rootElement = document.createElement(tag);
@@ -34,8 +39,9 @@ class Component {
 
 class ProductItem extends Component {
   constructor(product, id) {
-    super(id);
+    super(id, false);
     this.product = product;
+    this.render();
   }
 
   addtoCart() {
@@ -57,7 +63,6 @@ class ProductItem extends Component {
       `;
     const cartAddBtn = elmentItem.querySelector("button");
     cartAddBtn.addEventListener("click", this.addtoCart.bind(this));
-    return elmentItem;
   }
 }
 
@@ -69,7 +74,12 @@ class Cart extends Component {
   }
 
   constructor(hookid) {
-    super(hookid);
+    super(hookid, false);
+    this.orderItems = () => {
+      console.log("ordering...");
+      console.log(this.items);
+    };
+    this.render();
   }
 
   updateCartItems(item) {
@@ -88,56 +98,56 @@ class Cart extends Component {
     <button>Order Now</button>
     `;
     this.totalPrice = cartElement.querySelector("h2");
-    return cartElement;
+    const orderBtn = cartElement.querySelector("button");
+    orderBtn.addEventListener("click", this.orderItems);
   }
 }
 
 class ProductList extends Component {
-  products = [
-    new Product(
-      "soft billow",
-      "https://linensociety.com/cdn/shop/products/heirloom-pillow_14294b09-8232-4d5d-a305-022b802669ab_1400x.jpg?v=1584402804",
-      "soft billow for good sleeping",
-      19.99
-    ),
-    new Product(
-      "iranian carpet",
-      "https://kalouttour.com/wp-content/uploads/2020/09/persian-carpet-6-705x528.jpg",
-      "very good high quality persian carpet made by hand",
-      129.99
-    ),
-  ];
-
+  #products = [];
   constructor(hookid) {
-    super(hookid);
+    super(hookid, false);
+    this.#products = [
+      new Product(
+        "soft billow",
+        "https://linensociety.com/cdn/shop/products/heirloom-pillow_14294b09-8232-4d5d-a305-022b802669ab_1400x.jpg?v=1584402804",
+        "soft billow for good sleeping",
+        19.99
+      ),
+      new Product(
+        "iranian carpet",
+        "https://kalouttour.com/wp-content/uploads/2020/09/persian-carpet-6-705x528.jpg",
+        "very good high quality persian carpet made by hand",
+        129.99
+      ),
+    ];
+    this.render();
   }
 
   renderProducts() {
-    const productItemsList = this.renderElement("ul", "product-list");
-    productItemsList.setAttribute("id", "listID");
-    for (const item of this.products) {
+    for (const item of this.#products) {
       const product = new ProductItem(item, "listID");
-      const elmentItem = product.render();
     }
-    return productItemsList;
+  }
+  render() {
+    const productItemsList = this.renderElement("ul", "product-list", [
+      new attribute("id", "listID"),
+    ]);
+    if (this.#products && this.#products.length > 0) {
+      this.renderProducts();
+    }
   }
 }
 
 class Shop {
   cart = new Cart("app");
   productList = new ProductList("app");
-
-  render() {
-    const cartElemnt = this.cart.render();
-    const produtListElemnt = this.productList.renderProducts();
-  }
 }
 
 class App {
   static init() {
     this.shop = new Shop();
     this.cart = this.shop.cart;
-    this.shop.render();
   }
 
   static addToCartApp(product) {
