@@ -90,6 +90,7 @@ class ToolKit {
 
   detach() {
     this.divEl.remove();
+
     this.hasToolKit = false;
     this.project.setShowToolKit();
     this.project.setHasToolValue(this.hasToolKit);
