@@ -9,6 +9,42 @@ class ProjectList {
         new ProjectItem(project.id, this.switchStatusHandler.bind(this))
       );
     }
+    this.setDrop();
+  }
+
+  setDrop() {
+    const list = document.querySelector(`#${this.type}-projects ul`);
+
+    list.addEventListener("dragenter", (event) => {
+      if (event.dataTransfer.types[0] === "text/plain") {
+        event.preventDefault();
+        list.parentElement.classList.add("droppable");
+      }
+    });
+
+    list.addEventListener("dragover", (event) => {
+      if (event.dataTransfer.types[0] === "text/plain") {
+        event.preventDefault();
+      }
+    });
+
+    list.addEventListener("dragleave", (event) => {
+      if (event.relatedTarget.closest(`#${this.type}-projects ul`) !== list) {
+        list.parentElement.classList.remove("droppable");
+      }
+    });
+
+    list.addEventListener("drop", (event) => {
+      list.parentElement.classList.remove("droppable");
+      const projId = event.dataTransfer.getData("text/plain");
+      if (this.projects.find((pro) => pro.id === projId)) {
+        return;
+      }
+      document
+        .getElementById(projId)
+        .querySelector("button:last-of-type")
+        .click();
+    });
   }
 
   setAddFuncCllBck(addFuncHandler) {
@@ -39,6 +75,15 @@ class ProjectItem {
     this.hasToolKit = false;
     this.toolKit = new ToolKit(this, this.hasToolKit);
     this.setShowToolKit();
+    this.setDrag();
+  }
+
+  setDrag() {
+    const item = document.getElementById(this.id);
+    item.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", this.id);
+      event.dataTransfer.effectAllowed = "move";
+    });
   }
 
   setShowToolKit() {
@@ -107,7 +152,8 @@ class ToolKit {
     this.hasToolKit = true;
   }
 
-  detach() {
+  detach(event) {
+    console.log(event);
     this.divEl.remove();
 
     this.hasToolKit = false;
