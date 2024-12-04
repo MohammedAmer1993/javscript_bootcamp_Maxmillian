@@ -4,6 +4,7 @@ const submitBtn = document.querySelector("form button");
 const fetchBtn = document.querySelector("#available-posts button");
 const titleInp = document.getElementById("title");
 const textInp = document.getElementById("content");
+const form = document.querySelector("form");
 
 function checkInputValue() {
   if (!titleInp.value || !textInp.value) {
@@ -18,7 +19,7 @@ function clearinput() {
   textInp.value = "";
 }
 
-function sendHttpReq(method, url, data) {
+function sendHttpReq(url, method, data) {
   const promise = new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();
     req.open(method, url);
@@ -41,7 +42,7 @@ function sendHttpReq(method, url, data) {
 function sendHTTPFetch(url, method, post) {
   return fetch(url, {
     method: method,
-    body: JSON.stringify(post),
+    body: post,
   });
 }
 
@@ -90,11 +91,13 @@ async function uploadPosts() {
     body: textInp.value,
     userId: Math.random(),
   };
+  const fd = new FormData(form);
+  fd.append("userId", Math.random());
   try {
     const response = await sendHTTPFetch(
       "https://jsonplaceholder.typicode.com/posts",
       "POST",
-      obj
+      fd
     );
     console.log(response);
   } catch (error) {
