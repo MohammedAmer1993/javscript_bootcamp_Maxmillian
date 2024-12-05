@@ -46,33 +46,31 @@ function sendHTTPFetch(url, method, post) {
   });
 }
 
-sendHTTPFetch("https://jsonplaceholder.typicode.com/posts")
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      throw new Error(`status code is ${response.status}`);
-    }
-  })
-  .then((response) => {
-    console.log(response);
-    for (const post of response) {
-      const element = document.importNode(postItem.content, true);
-      element.querySelector("h2").innerText = post.title.toUpperCase();
-      element.querySelector("p").innerText = post.body;
-      element.querySelector("li").id = post.id;
-      ulposts.append(element);
-    }
-  })
-  .catch((error) => console.log("error.message"));
+// sendHTTPFetch("https://jsonplaceholder.typicode.com/posts")
+//   .then((response) => {
+//     if (response.ok) {
+//       return response.json();
+//     } else {
+//       throw new Error(`status code is ${response.status}`);
+//     }
+//   })
+//   .then((response) => {
+//     console.log(response);
+//     for (const post of response) {
+//       const element = document.importNode(postItem.content, true);
+//       element.querySelector("h2").innerText = post.title.toUpperCase();
+//       element.querySelector("p").innerText = post.body;
+//       element.querySelector("li").id = post.id;
+//       ulposts.append(element);
+//     }
+//   })
+//   .catch((error) => console.log("error.message"));
 
 async function fetchPosts(method, url) {
   try {
-    const response = await sendHTTPFetch(url).then((response) =>
-      response.json()
-    );
-    console.log(response);
-    for (const post of response) {
+    const response = await axios.get(url);
+    console.log(response.data);
+    for (const post of response.data) {
       const element = document.importNode(postItem.content, true);
       element.querySelector("h2").innerText = post.title.toUpperCase();
       element.querySelector("p").innerText = post.body;
@@ -84,7 +82,8 @@ async function fetchPosts(method, url) {
   }
 }
 
-// fetchPosts("GET", "https://jsonplaceholder.typicode.com/posts");
+fetchPosts("GET", "https://jsonplaceholder.typicode.com/posts");
+
 async function uploadPosts() {
   const obj = {
     title: titleInp.value,
@@ -94,9 +93,8 @@ async function uploadPosts() {
   const fd = new FormData(form);
   fd.append("userId", Math.random());
   try {
-    const response = await sendHTTPFetch(
+    const response = await axios.post(
       "https://jsonplaceholder.typicode.com/posts",
-      "POST",
       fd
     );
     console.log(response);
